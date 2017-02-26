@@ -1,0 +1,28 @@
+setwd("C:\\Users\\yansenxu\\Desktop\\数量生态学与R语言 第一讲 赖江山\\上课材料\\数据")
+b=read.csv("rawdata.csv",header=T)#读入数据
+tram.sitedata=function(data1)
+{Species=unique(data1$species) #提取所有的不重复物种名称并赋给Species向量
+Site=unique(data1$site) #提取所有不重复样方编号并赋给Site向量
+n=length(Species) #计算不重复物种数并赋值给n
+m=length(Site)   #计算不重复的样方数并赋值给m
+newdata=as.data.frame(matrix(0,m,n))#构建一个新m×n的矩阵，然后将矩阵转为数据框,才能添加行名和列名
+names(newdata)=Species #将列名改为物种名称
+row.names(newdata)=Site #将行名改为样方的名称
+#做一个行循环,然后进行填空
+for(i in 1:m)
+{newdata1=data1[data1$site==Site[i],]#提取原始数据第i个样方的数据
+newspecies=newdata1$species           #提取第i个样方的物种名
+newn=length(newspecies)               #提取第i个样方的物种数
+#做一个列循环,看多少个物种，就只插入多少数值
+for (j in 1:newn)
+{Ncol=which(Species==newspecies[j])#提取第i个样方的物种所在的位置
+newdata[i,Ncol]=newdata1$abun[j]   #第i行物种所在的位置依次填入当前的物种多度值
+}
+}
+
+return(newdata)#返回结果
+}
+
+k=tram.sitedata(b)
+write.csv(k,file="sitedata.csv")
+vegdist(na.omit(k),"jaccard")

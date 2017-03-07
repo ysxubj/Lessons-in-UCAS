@@ -103,5 +103,32 @@ plot(x,y,'b')
 x=[-2:0.02:2];  % 生成自变量向量
 y=1.1*sign(x).*(abs(x)>1.1) + x.*(abs(x)<=1.1); %利用判读后的0和1利用*连接
 plot(x,y)
-
+%%
+theta=0:0.01:6*pi;
+rho=5*sin(4*theta/3);
+polar(theta,rho);%极坐标图绘制
+rho=5*sin(theta/3);
+polar(theta,rho)
+%%
+%在一个图形窗口绘制四个子图
+t=0:0.2:2*pi;%x值
+y=sin(t);%y值
+subplot(2,2,1),stairs(t,y)%第一个子图
+subplot(2,2,2),stem(t,y)
+subplot(2,2,3),bar(t,y)
+subplot(2,2,4),semilogx(t,y)
+%%
+t=(1/16:1/8:1)*2*pi;
+x=exp(t).*sin(t);
+y=t.*cos(t);
+fill(x,y,'k'),grid on%grid on绘制网格， k为填充颜色
+fill(x,y,'k'),grid off%off关闭
+%%
+x=0:0.01:5;
+y1=cos(5*x)+0.1*x.^2;
+y2=sin(3*x)+0.1*x;
+figure(1)%创建第一个绘图窗口
+plot(x,y1)
+figure(2)%创建第二个绘图窗口
+plot(x,y2)
 

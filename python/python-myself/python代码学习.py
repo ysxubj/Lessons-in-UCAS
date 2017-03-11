@@ -139,5 +139,69 @@ names = ['Michael', 'Bob', 'Tracy']
 scores = [95, 75, 85]
 d={'Michael':95,'Bob': 75,'Tracy': 85}#dict的定义
 d["Bob"]=10000
+#%%
+#函数的调用与编写
+abs(-100)#绝对值函数
+max(1,23,4,5,6,34322,4,32,1,3212,32)
+min(1,23,412,41,2321,-123)
+#数据类型转换函数
+int(-213201.32)
+float(321)
+s=str(1.32)
+type(s)#查看数据类型
+bool(1)
+#练习
+print(hex(255))
+#%%定义函数
+def my_abs(x):
+    if x>0:
+        print(x)
+    else:
+        print(-x)
+my_abs(-3214321)
+my_abs(213)
+import os 
+os.getcwd()
+os.chdir("D:\\GitHub\\Lessons-in-UCAS\\python\\python-myself")
+os.getcwd()
+import my_abs
+my_abs.my_abs(21312)
+x=21
+if x>3:
+    pass#空占位符，表示什么也不干
+import move
+step=move.move(12,23,4,5)
+#%%
+def number(num):#可以传递list and tuple
+    result=0
+    for x in num:
+        result=result+x^2
+    return result
+number(*(1,2,3,5,4))#添加*可以传递元组数据
+#%%
+def person(name,age,**kw):
+    print('name:',name,'age:',age,'other:',kw)
+person('xuyansen',35,city='beijing')
+#%%
+def fact(n):
+    result=1
+    for x in list(range(1,n+1)):
+        result=x*result
+    return result
+#%%
+#递归函数
+def fact(n):
+    if n==1:
+        return 1
+    return n * fact(n - 1)
+
+    
+   
+
+
+
+
+
+
 
 

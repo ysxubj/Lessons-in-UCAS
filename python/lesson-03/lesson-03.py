@@ -148,5 +148,102 @@ pow(2,1,3)
 len('rewrwe')
 round(321.45321)
 a=range(12)
+#%%
+#变量类型转换
+float(3)
+hex(3)
+#序列对象的类型转换
+list("hello world")#生成一个列表
+tuple("hello world")#生成一个元组
+list((1,2,3,4))
+tuple([1,2,3,4])
+#%%
+#序列操作函数
+def is_odd(n):
+    return n%2==1
+a=list(filter(is_odd,[1,2,4,5,6,3,4,2,5,6,7]))#对函数进行序列操作
+def f(x):
+    return x*x
+list(map(f,list(range(132))))
+#%%
+#模块的应用
+import sys#调用sys模块中的函数
+sys.path
+print('The command line arguments are:')
+for i in sys.argv:
+    print (i)
+print('\n\nThe PYTHONPATH is',sys.path,'\n')
+#%%
+import sys
+sys.path
+#%%
+#!/usr/bin/python
+# Filename: using_name.py
+if __name__ == '__main__':
+    print('This program is being run by itself')
+else:
+    print('I am being imported from another module’)
+#%%
+import os
+os.chdir("D:\GitHub\Lessons-in-UCAS\python\lesson-03")#设置工作路径
+#%%
+#创建package
+import package_test#导入package
+package_test.testmodule.sayhi()
+#%%
+#输入输出
+name=input("pleas input your name: \n")#\n换行
+print(name)
+#%%
+#字符串基本输出格式
+print('we are the {} who say "{}!"'.format('knights','Ni'))#format格式化字符
+print('{0} and {1}'. format('spam','eggs'))
+#%%
+#文件读写功能
+f=open("foo.txt","w")
+f.write("Python 是一个非常好的语言。\n是的,的确非常好!!\n")
+f.close()
+f=open("foo.txt","r")
+str=f.read()
+print(str)
+f.close()
+f=open("foo.txt","r")
+str = f.readline()
+f.seek(1,from_what)
+#%%
+import pickle
+data1 = {'a': [1, 2.0, 3, 4+6j],
+         'b': ('string', u'Unicode string'),
+         'c': None}
+
+selfref_list = [1, 2, 3]
+selfref_list.append(selfref_list)
+output = open('data.pkl', 'wb')#写入pkl文件
+pickle.dump(data1,output)
+pickle.dump(selfref_list,output,-1)
+output.close()
+#读取文件
+import pprint,pickle
+pkl_file=open('data.pkl','rb')
+data1=pickle.load(pkl_file)
+pprint.pprint(data1)
+data2=pickle.load(pkl_file)
+pprint.pprint(data2)
+pkl_file.close()
+#%%
+while True:
+    print("the nanem ")
+#%%
+#异常检查
+fname=input('enter filen :')
+try:
+              fobj = open(fname, 'r')
+except IOError, e:
+              print "*** file open error:", e
+else:
+              for eachLine in fobj:
+                     print eachLine,
+              fobj.close()
+
 
 

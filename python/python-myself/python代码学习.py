@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os  # 导入标准库
+
+from conda_env.installers import pip
+
 os.getcwd()  # 查看当前工作路径
 os.chdir('D:\GitHub\Lessons-in-UCAS\python')
 os.getcwd()
@@ -194,6 +197,8 @@ def fact(n):
     if n==1:
         return 1
     return n * fact(n - 1)
+#%%
+
 
     
    

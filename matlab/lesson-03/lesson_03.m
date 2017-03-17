@@ -171,8 +171,163 @@ syms m n;
 a=limit(symsum(1/m,m,1,n)-log(n),n,inf)
 vpa(a,70)
 %%
-%数值微分,中心差分方法
-diff_ctr()
+%解析解
+syms x;
+y=sin(x)/(x^2+4*x+3)
+a=0:0.05:pi;
+yy1=diff(y);%一阶导数
+subs(yy1,x,a);
+yy2=diff(yy1);%二阶导数
+subs(yy2,x,a);
+yy3=diff(yy2);%三阶导数
+subs(yy3,x,a);
+yy4=diff(yy3);%四阶导数
+subs(yy4,x,a);%解析方程后用a值代替x值
+%数值解
+y=sin(x)./(x.^2+4*x+3);   % 生成已知数据点
+h=0:0.05:pi;
+[y1,dx1]=diff_ctr(y,h,1); subplot(221),plot(x,f1,dx1,y1,':');
+[y2,dx2]=diff_ctr(y,h,2); subplot(222),plot(x,f2,dx2,y2,':');
+[y3,dx3]=diff_ctr(y,h,3); subplot(223),plot(x,f3,dx3,y3,':');
+[y4,dx4]=diff_ctr(y,h,4); subplot(224),plot(x,f4,dx4,y4,':');
+%subplot(row,col,num)
+%%
+%插值和拟合多项式的求导数
+xd=[ 0  0.2000  0.4000  0.6000  0.8000  1.000];
+yd=[0.3927  0.5672  0.6982  0.7941  0.8614  0.9053];
+a=0.3;
+L=length(xd);%点的数量
+d=polyfit(xd-a,yd,L-1);%先插值,在0.3处求多项式
+fact=[1];
+for k=1:L-1
+    fact=[factorial(k),fact];%计算各阶的阶乘
+end
+deriv=d.*fact%各阶的阶乘×各阶的导数
+%直接调用der函数
+ploy_dry(xd,yd,a)
+%%
+%二元函数的梯度计算
+[x,y]=meshgrid(-3:.2:3,-2:.2:2);%x,y的矩阵
+z=(x.^2-2*x).*exp(-x.^2-y.^2-x.*y);%定义函数
+[fx,fy]=gradient(z); 
+fx=fx/0.2; fy=fy/0.2;
+contour(x,y,z,30); 
+hold on;
+quiver(x,y,fx,fy)
+%绘制误差曲线,计算了数值方法和解析解的误差值
+zx=-exp(-x.^2-y.^2-x.*y).*(-2*x+2+2*x.^3+x.^2.*y-4*x.^2-2*x.*y);%精确的x偏导公式
+zy=-x.*(x-2).*(2*y+x).*exp(-x.^2-y.^2-x.*y);%精确的y偏导公式
+surf(x,y,abs(fx-zx)); axis([-3 3 -2 2 0,0.08])%绘制表面图,fx与zx的误差计算
+figure;  
+surf(x,y,abs(fy-zy)); axis([-3 3 -2 2 0,0.11])%绘制表面图,fy与zy的误差计算
+%%
+%数值方法求积分
+x1=[0:pi/30:pi]';
+y=[sin(x1) cos(x1) sin(x1/2)];
+x=[x1 x1 x1];
+S=sum((2*y(1:end-1,:)+diff(y)).*diff(x))/2
+trapz(x1,y)%x1为列向量,y为矩阵每列表示不同的函数
+%%
+x=[0:0.01:(3/2)*pi,(3/2)*pi];
+y=cos(15*x);
+plot(x,y)
+%理论值
+syms x;
+int(cos(15*x),0,3*pi/2)%积分
+%数值方法
+h0=[0.1,0.01,0.001,0.0001,0.00001,0.000001]; %不同的步长
+v=[];
+for h=h0,
+    x=[0:h:3*pi/2, 3*pi/2]; y=cos(15*x); I=trapz(x,y); 
+    v=[v; h, I, 1/15-I ];%v;表示循环每次换行，将之前的v和h步长,I数值积分，1/15-I误差
+end
+format long; %显示长型
+v
+%%
+%辛普森求解公式
+%函数的其他表示
+f=inline('2/sqrt(pi)*exp(-x.^2)','x');
+%积分
+y=quad(fun,0,1.5,1e-20);
+%%
+x=[0:0.01:2,2+eps:0.01:4,4];
+y=exp(x.^2).*(x<=2)+80./(4-sin(16*pi*x)).*(x>2);
+y(end)=0;% 强制让y的end点为零，为了绘制填充图
+x=[eps,x];%起点x
+y=[0,y];%起点y
+fill(x,y,'g')%填充图
+%%
+f=inline('exp(x.^2).*(x<=2)+80./(4-sin(16*pi*x)).*(x>2)','x');%定义函数
+quad(f,0,4)%辛普森积分
+quadl(f,0,4)
+%解析解
+syms x;
+I=vpa(int(exp(x^2),0,2)+int(80/(4-sin(16*pi*x)),2,4))
+%%
+%Guass求积
+%定义好了高斯的公式
+gauss2('gaussf',0,1)
+%%
+%双重积分的数值解
+%1矩形区域求积分
+f=inline('exp(-x.^2/2).*sin(x.^2+y)','x','y')
+dblquad(f,-2,2,-1,1)
+%2任意区域下的积分，调用工具箱NIT,工具箱放在工作路径下
+f=inline('exp(-x.^2/2)*sin(x.^2+y)','y','x')
+yl=inline('sqrt((1-x.^2)/2)','x')
+ys=inline('-sqrt((1-x.^2)/2)','x')
+quad2dggen(f,ys,yl,-1/2,1,eps)%
+%%
+%解析方法验算
+syms x y;
+i1=int(exp(-x^2/2)*sin(x^2+y), y, -sqrt(1-x^2/2), sqrt(1-x^2/2));
+int(i1, x, -1/2, 1)
+vpa(ans)
+%%
+%圆的积分
+f1=inline('sqrt(1-y.^2)','y');
+f2=inline('-sqrt(1-y.^2)','y')
+f=inline('exp(-x.^2/2).*sin(x.^2+y)','x','y'); 
+quad2dggen(f,f2,f1,-1,-1,eps)
+%%
+%曲面积分
+syms t
+syms a positive;
+x=a*cos(t);
+y=a*sin(t);
+z=a*t;
+int(z^2/(x^2+y^2)*sqrt(diff(x,t)^2+diff(y,t)^2)+diff(z,t)^2,t,0,2*pi)
+%%
+x=0:0.01:1.2;
+y1=x;
+y2=x.^2
+plot(x,y1,x,y2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

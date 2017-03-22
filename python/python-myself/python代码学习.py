@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os  # 导入标准库
-
-from conda_env.installers import pip
-
 os.getcwd()  # 查看当前工作路径
 os.chdir('D:\GitHub\Lessons-in-UCAS\python')
 os.getcwd()
@@ -193,13 +190,20 @@ def fact(n):
     return result
 #%%
 #递归函数
-def fact(n):
+def f(n):
     if n==1:
         return 1
     return n * fact(n - 1)
 #%%
-
-
+#递归
+def f(n):
+    if n==1 or n==0:
+        return 1
+    return n*f(n-1)
+#%%
+def move(n,a,b,c):
+    
+    
     
    
 

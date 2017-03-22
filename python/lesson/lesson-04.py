@@ -178,6 +178,58 @@ x=np.linalg.solve(a,b)
 x
 #%%
 np.mat([[1,2],[3,4]])
+#%%
+import numpy as np
+a=np.arange(0,12)
+a.shape=3,4
+a
+import os 
+os.getcwd()
+a.tofile('mydata.bin')#二进制的
+b=np.fromfile('mydata.bin',dtype=np.float)
+b
+a.dtype
+b=np.fromfile('mydata.bin',dtype=np.int32)
+b
+b.shape=3,4
+b
+#%%
+np.save('mydata.npy',a)
+c=np.load('mydata.npy')
+c
+#%%
+#多个数据保存
+a = np.array([[1,2,3],[4,5,6]])
+b = np.arange(0, 1.0, 0.1)
+c = np.sin(b)
+np.savez("result.npz", a, b, sin_array = c)
+r=np.load('result.npz')
+r['arr_0']#数组a
+r['arr_1']#数组b
+r['sin_array']#sin_array数组
+#%%
+#文本文件的存储
+a = np.arange(0,12,0.5).reshape(4,-1)
+np.savetxt('mydata.txt',a)
+np.loadtxt('mydata.txt')
+np.savetxt('data.txt',a,fmt="%d",delimiter=',')#存为整数，利用逗号分隔
+np.loadtxt('data.txt')
+#%%
+a=np.arange(8)
+b=np.add.accumulate(a)
+c=a+b
+f =file("result.npy", "wb")
+#现在存为f的对象
+np.save(f,a)
+np.save(f,b)
+np.safe(f,c)
+f.close()
+#读取文件
+
+
+
+
+
 
 
 

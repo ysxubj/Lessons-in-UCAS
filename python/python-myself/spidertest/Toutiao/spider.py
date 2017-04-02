@@ -15,7 +15,7 @@ client = pymongo.MongoClient(MONGO_URL, connect=False)
 db = client[MONGO_DB]
 
 
-def get_page_index(offset, keyword):
+def get_page_index(offset, keyword):#获取首页信息
     data = {
         'autoload': 'true',
         'count': 20,
@@ -37,19 +37,20 @@ def get_page_index(offset, keyword):
         return None
 
 
-def download_image(url):
+def download_image(url):#下载图片
     print('Downloading', url)
     try:
         response = requests.get(url)
         if response.status_code == 200:
-            save_image(response.content)
+            save_image(response.content)#存储图的索引舍respose.content,请求图片，请求网页用的是text
         return None
     except ConnectionError:
+        print('请求图片出错',url)
         return None
 
 
-def save_image(content):
-    file_path = '{0}/{1}.{2}'.format(os.getcwd(), md5(content).hexdigest(), 'jpg')
+def save_image(content):#存为图片
+    file_path = '{0}/{1}.{2}'.format(os.getcwd(), md5(content).hexdigest(), 'jpg')#路径/文件名.后缀，md5()如果内容相同那么md5值就相同
     print(file_path)
     if not os.path.exists(file_path):
         with open(file_path, 'wb') as f:
@@ -67,7 +68,7 @@ def parse_page_index(text):
         pass
 
 
-def get_page_detail(url):
+def get_page_detail(url):#获得url中的详细信息
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -78,14 +79,14 @@ def get_page_detail(url):
         return None
 
 
-def parse_page_detail(html, url):
-    soup = BeautifulSoup(html, 'lxml')
+def parse_page_detail(html, url):#解析详情页的方法
+    soup = BeautifulSoup(html, 'lxml')#title信息提取
     result = soup.select('title')
     title = result[0].get_text() if result else ''
-    images_pattern = re.compile('var gallery = (.*?);', re.S)
-    result = re.search(images_pattern, html)
+    images_pattern = re.compile('var gallery = (.*?);', re.S)#图片信息
+    result = re.search(images_pattern, html)#传入正则表达式的对象，然后search一下
     if result:
-        data = json.loads(result.group(1))
+        data = json.loads(result.group(1))#将1中的结果取出
         if data and 'sub_images' in data.keys():
             sub_images = data.get('sub_images')
             images = [item.get('url') for item in sub_images]
@@ -97,7 +98,7 @@ def parse_page_detail(html, url):
             }
 
 
-def save_to_mongo(result):
+def save_to_mongo(result):#将数据存到mongdb中
     if db[MONGO_TABLE].insert(result):
         print('Successfully Saved to Mongo', result)
         return True

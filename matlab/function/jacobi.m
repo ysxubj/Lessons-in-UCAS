@@ -8,4 +8,3 @@ while norm(y-x0)>=1.0e-6
     y=B*x0+f;
     n=n+1;
 end
-n

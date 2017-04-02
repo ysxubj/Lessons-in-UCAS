@@ -1,8 +1,8 @@
 import requests
-from requests.exceptions import RequestException
-import re
-import json
+from requests import RequestException
 from multiprocessing import Pool
+import re
+
 def get_one_page(url):
     try:
       response = requests.get(url)
@@ -11,6 +11,7 @@ def get_one_page(url):
       return None
     except RequestException:
       return None
+
 def parse_one_page(html):
     pattern= re.compile('<dd>.*?board-index.*?>(\d+)</i>.*?data-src="(.*?)".*?name"><a'
                          +'.*?>(.*?)</a>.*?star">(.*?)</p>.*?releasetime">(.*?)</p>'
@@ -26,22 +27,18 @@ def parse_one_page(html):
             'score':item[5]+item[6]
         }
 
-def write_to_file(content):
-    with open('result.txt','a',encoding='utf-8') as f:
-        f.write(json.dumps(content,ensure_ascii=False)+'\n')
-        f.close()
+
+
+
+
 
 
 def main(offset):
-    url = 'http://maoyan.com/board/4?offset='+str(offset)
+    url = "http://bj.lianjia.com/ershoufang/dongcheng/pg{}".format(str(offset))
+    #url = 'http://bj.lianjia.com/ershoufang/{}/pg{}/'.format(response.meta["id2"], str(1))
     html = get_one_page(url)
-    for item in parse_one_page(html):
-        print(item)
-        write_to_file(item)
+    print(html)
 
-if __name__ == '__main__':
-    pool=Pool()
-    pool.map(main, [i*10 for i in range(10)])
-
-
-
+if __name__ == "__main__":
+    pool = Pool()
+    pool.map(main,[2])
